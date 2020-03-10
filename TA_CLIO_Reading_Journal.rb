@@ -1,24 +1,43 @@
 # TA_CLIO_Reading_Journal
 
+
 require_relative 'reading_journal_classes_methods.rb'
+require 'tty-prompt'
+
+initialise_app = true
+
+while initialise_app == true
 
 # puts "Hello there! What's your name?"
-
 # name = gets.chomp 
 
-# puts "Hi #{name}, I'm CLIO - your reading companion. 
-# \n I help you stay on track with your reading goals. 
-# \n What would you like to do? 
-# \n Select by entering a number:"
-# puts "1. Check Log"
-# puts "2. View progress"
-# puts "3. Add/Edit/Delete Book"
-# puts "4. Exit"
+name = "Reader"
+puts "Hi #{name}, I'm CLIO - your reading companion. I help you stay on track with your reading goals." 
 
-# action_selection = gets.chomp
-# action(action_selection)
+prompt = TTY::Prompt.new
+question = "What would you like to do?"
+choices = [{"Add book" => 1}, {"Check log" => 2}, {"Manage log" => 3}, {"Exit" => 4}]
+user_input = prompt.select(question, choices) 
+# do |menu|
+    # menu.choice "Check Log"
+    # menu.choice "View progress"
+    # menu.choice "Add/Edit/Delete Book"
+    # menu.choice "Exit"
+# end
 
-pickles = add_book()
-system("clear")
-p pickles
+main_menu_action(user_input)
+
+    if user_input == 4
+        initialise_app = false
+    else 
+    end
+end
+
+
+
+
+
+# pickles = add_book()
+# system("clear")
+# p pickles
 
