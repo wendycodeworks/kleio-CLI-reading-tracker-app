@@ -20,17 +20,21 @@ end
 
 #   Goals Method
 # Setting reading goal
-def set_goals
-    # Prompt user to set a goal 
+# @user_goal = []
 
-    # Choose a deadline (total a month/ total in year)
-    
-    # Set a number of books
+# #   Goals Method
+# # Setting reading goal
+# def set_goals()
+#     # Prompt user to set a goal 
+#     puts "Enter a number of books you would like to read:"
+#     @goal_num = gets.chomp.to_i
+#     prompt = TTY::Prompt.new
+#     question = "When would you like to achieve this by?"
+#     choices = [{"A year" => 1}, {"A month" => 2}]
+#     user_input = prompt.select(question, choice
 
-    # Store goal details in user info variable
-
-    # Confirm
-end
+#     return "You have set your goal to #{@goal_num} books in #{goal_set(user_input)}. Nice work!"
+# end
 
 ## View progress based on current reading habits
 def view_progress
@@ -49,12 +53,12 @@ end
 # Book & Log methods
 #Creating a record of a book to be stored in one of 3 lists
 def add_book()
-    puts "Please enter book title:"
-    @title = gets.chomp
-    puts "Please enter author:"
-    @author = gets.chomp
+    prompt = TTY::Prompt.new
+    @title = prompt.ask("Please enter book title:", required: true) 
+    prompt = TTY::Prompt.new
+    @author = prompt.ask("Please enter author:", required: true) 
 
-    list_choice = view_log('Please select a log')
+    list_choice = view_log('Which log would you like to add this book to?')
 
     title = Book.new(@title, @author)
 
@@ -155,18 +159,10 @@ def check_log()
         log_name = @user_log[2]
         list_choice = @past_reads
         total_amount = @past_reads.count()
-        puts check_log_display(list_choice, total_amount)
+        puts check_log_display(list_choice, total_amount, log_name)
     end
     back_to_main()
 end
-
-# def collect_quote()
-
-# end
-
-# def quote_generator()
-
-# end
 
 #   Error Handling
 # Opening an empty log
@@ -217,13 +213,16 @@ end
 
 # Manage Log Menu
 def manage_log()
+    system("clear")
     prompt = TTY::Prompt.new
     question = "Select an action:"
-    choices = [{"Edit book" => 1}, {"Delete book" => 2}]
+    choices = [{"Reassign book" => 1}, {"Edit book" => 2}, {"Delete book" => 3} ]
         user_input = prompt.select(question, choices)
         if user_input == 1
-            edit_book()
+            p "Feature coming soon!"
         elsif user_input == 2
+            edit_book()
+        elsif user_input == 3
             delete_book()
         end
 end
@@ -247,7 +246,7 @@ def check_log_display(list_choice, total_amount, log_name)
         table.style = {:all_separators => true}
         puts table
         box = TTY::Box.frame(width: 50, height: 5, align: :center, padding: 1, border: :thick, title: {top_left: ' TOTAL '}) do
-            "#{total_amount} books."
+            "#{total_amount} books"
             end
         puts box
     else
@@ -257,6 +256,7 @@ end
 
 # Return list choice as an integer (for viewing of logs)
 def view_log(question)
+    system("clear")
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
     list_choice = prompt.select(question, choices)
@@ -272,18 +272,16 @@ end
 
 # Returns list choice as array
 def edit_log(question)
+    system("clear")
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
     list_choice = prompt.select(question, choices)
         if list_choice == 1
             list_choice = @current_reads
-            return list_choice
         elsif list_choice == 2
-            list_choice = @future_reads
-            return list_choice
+           list_choice = @future_reads
         else list_choice == 3
             list_choice = @past_reads
-            return list_choice
         end
     return list_choice
 end
