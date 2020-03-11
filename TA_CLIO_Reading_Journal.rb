@@ -1,4 +1,4 @@
-# # TA_CLIO_Reading_Journal
+# # # TA_CLIO_Reading_Journal
 
 #Gems
 require 'tty-box'
@@ -6,16 +6,9 @@ require 'tty-prompt'
 require 'pastel'
 require 'tty-font'
 require 'terminal-table'
+
+#Method file
 require_relative 'reading_journal_classes_methods'
-
-# User input variables
-@user_log = [@current_reads, @future_reads, @past_reads]
-@current_reads = [["Cat in the Hat", "Dr Seuss"], ["Alice in Wonderland", "Lewis Carol"]]
-@future_reads  = []
-@past_reads    = []
-@goals = {}
-@progress = {}
-
 
 
 initialise_app = true

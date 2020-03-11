@@ -1,5 +1,13 @@
 # Terminal-app Reading Journal Classes & Methods
 
+# User input variables
+@user_log = ["Current Reads", "Future Reads", "Past Reads"]
+@current_reads = [["Cat in the Hat", "Dr Seuss"], ["Alice in Wonderland", "Lewis Carol"]]
+@future_reads  = [["Beyond Infinity", "Eugene Cheng"], ["Create Dangerously", "Albert Camus"]]
+@past_reads    = []
+@goals = {}
+@progress = {}
+
 # Book class 
 class Book
     attr_accessor :title, :author
@@ -16,11 +24,12 @@ def set_goals
     # Prompt user to set a goal 
 
     # Choose a deadline (total a month/ total in year)
-
+    
     # Set a number of books
 
     # Store goal details in user info variable
 
+    # Confirm
 end
 
 ## View progress based on current reading habits
@@ -45,7 +54,7 @@ def add_book()
     puts "Please enter author:"
     @author = gets.chomp
 
-    list_choice = edit_log('Please select a log')
+    list_choice = view_log('Please select a log')
 
     title = Book.new(@title, @author)
 
@@ -94,15 +103,11 @@ end
 
 # search for and delete book item      
 def delete_book()
-        # select array
         list_choice = edit_log('Please select a log')
-        #identify entry in chosen array
         log = list_choice
         prompt = TTY::Prompt.new
         search_result = prompt.ask("Search by title or author:")
-
         exist = false
-
         for i in 0..log.length-1
             if log[i][0].include?(search_result)
                 puts log[i]
@@ -112,8 +117,8 @@ def delete_book()
                     log.delete(log[i]) 
                     else
                     list_choice
-                    exist = true
                     end
+                    exist = true
             elsif log[i][1].include?(search_result)
                puts log[i]
                 prompt = TTY::Prompt.new
@@ -122,51 +127,37 @@ def delete_book()
                     log.delete(log[i]) 
                     else
                     list_choice
-                    exist = true
                     end
+                    exist = true
                 end 
             end
         if exist == false
         search_error()
      end
-
+     back_to_main
 end
 
 # Check/view logs
 def check_log()
-    
-    system("clear")
-    
+   system("clear")
    list_choice = view_log("Please select a log:")
-
     if list_choice == 1
+        log_name = @user_log[0]
+        list_choice = @current_reads
         total_amount = @current_reads.count()
-        if total_amount > 0
-            puts log_display(@current_reads)
-            puts log_total_display(total_amount)
-            back_to_main()
-        else
-            empty_log()
-        end
+        puts check_log_display(list_choice, total_amount, log_name)
     elsif list_choice == 2
+        log_name = @user_log[1]
+        list_choice = @future_reads
         total_amount = @future_reads.count()
-        if total_amount > 0
-            puts log_display(@future_reads)
-            puts log_total_display(total_amount)
-            print box
-        else
-            empty_log()
-        end
-    else list_choice == 3 
+        puts check_log_display(list_choice, total_amount, log_name)
+    elsif list_choice == 3 
+        log_name = @user_log[2]
+        list_choice = @past_reads
         total_amount = @past_reads.count()
-        if total_amount > 0
-            puts log_display(@past_reads)
-            puts log_total_display(total_amount)
-            print box
-        else
-            empty_log()
-        end
+        puts check_log_display(list_choice, total_amount)
     end
+    back_to_main()
 end
 
 # def collect_quote()
@@ -248,20 +239,21 @@ def back_to_main()
 end
 
 # Log methods
-# Table display
-def log_display(log)
-        table = Terminal::Table.new :title => "Current Reads", :headings => ['Title', 'Author'], :rows => log, :style => {:width => 50}
-        table.style = {:all_separators => true}
-    return table
-end
 
-# Total reads by log display
-def log_total_display(total_reads)
-box = TTY::Box.frame(width: 50, height: 5, align: :center, padding: 1, border: :thick, title: {top_left: ' TOTAL '}) do
-    "#{total_reads} books."
+# Complete log display
+def check_log_display(list_choice, total_amount, log_name)
+    if total_amount > 0
+        table = Terminal::Table.new :title => "#{log_name}", :headings => ['Title', 'Author'], :rows => list_choice, :style => {:width => 50}
+        table.style = {:all_separators => true}
+        puts table
+        box = TTY::Box.frame(width: 50, height: 5, align: :center, padding: 1, border: :thick, title: {top_left: ' TOTAL '}) do
+            "#{total_amount} books."
+            end
+        puts box
+    else
+       empty_log()
     end
-return box
-end
+end 
 
 # Return list choice as an integer (for viewing of logs)
 def view_log(question)
