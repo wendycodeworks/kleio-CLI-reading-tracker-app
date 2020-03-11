@@ -1,10 +1,12 @@
 # TA_CLIO_Reading_Journal
 
-require_relative 'reading_journal_classes_methods.rb'
+require_relative 'reading_journal_classes_methods'
 require 'tty-prompt'
 
+p main_menu_action
+
 initialise_app = true
-start_greeting
+start_greeting()
 name = "Reader"
 puts "Hi #{name}, I'm CLIO - your reading companion. I help you stay on track with your reading goals." 
 
@@ -17,8 +19,9 @@ prompt = TTY::Prompt.new
 question = "Select an action:"
 choices = [{"Add book" => 1}, {"Check log" => 2}, {"Manage log" => 3}, {"Exit" => 4}]
 user_input = prompt.select(question, choices) 
+p user_input
 
-main_menu_action(user_input)
+    main_menu_action(user_input)
 
     if user_input == 4
         initialise_app = false

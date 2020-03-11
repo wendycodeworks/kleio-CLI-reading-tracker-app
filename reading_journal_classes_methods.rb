@@ -86,37 +86,32 @@ def edit_book
         list_choice = log_edit_selection('Please select a log')
         #identify entry in chosen array
         log = list_choice
-        #to separate
-        puts "Search by title or author:"
-        search_result = gets.chomp.to_s
-        
+        prompt = TTY::Prompt.new
+        search_result = prompt.ask("Search by title or author:")
+
         exist = false
-    
+
         for i in 0..log.length-1
             if log[i][0].include?(search_result)
-                p log[i][0]
-                p "omg"
+                puts log[i]
                 puts "Record located. Enter new title:"
                 user_input = gets.chomp.to_s 
                 log[i][0] = user_input
                 puts "Record updated to #{log[i][0]} by #{log[i][1]}"
                 exist = true
             elsif log[i][1].include?(search_result)
-                p log[i][1]
-                puts "Record located. Enter new author:"
-                user_input = gets.chomp.to_s 
+                puts "Record located. #{log[i]}"
+                prompt = TTY::Prompt.new
+                user_input = prompt.ask("Enter new author:")
                 log[i][1] = user_input
                 puts "Record updated to #{log[i][0]} by #{log[i][1]}"
                 exist = true
             end
-        end
     if exist == false
         p 'invalid input'
      end
 end
     
-
-#remove from list
 def delete_book(title)
 
 end
@@ -173,30 +168,6 @@ end
 
 # end
 
-def main_menu_action(user_input)
-    
-    #Add book    
-    if user_input ==  1
-        add_book()
-    #check log
-        elsif user_input ==  2
-        check_log()
-    # manage log
-        elsif user_input == 3
-        puts "Coming soon"
-        return_to_mm
-    # exit app
-        elsif user_input ==  4
-        puts "You can check out any time you like but you can never leave. *Guitar riffs*"
-    end
-end
-
-def return_to_mm()
-    prompt = TTY::Prompt.new
-    prompt.yes?("Would you like to return to the main menu?")
-    system("clear")
-end
-
 #   Error Handling
 
 def error_in_log
@@ -214,6 +185,31 @@ end
 
 #   Navigation Methods
 
+def main_menu_action(user_input)   
+    # user_input = log_selection("Please select a log:")
+    #add new book to log
+    if user_input ==  1
+        add_book()
+    #check log
+        elsif user_input ==  2
+        check_log()
+    # manage log
+        elsif user_input == 3
+        edit_book
+    # exit app
+        elsif user_input ==  4
+        puts "You can check out any time you like but you can never leave. *Guitar riffs*"
+    end
+end
+
+# returns user to main menu
+def return_to_mm()
+    prompt = TTY::Prompt.new
+    prompt.yes?("Would you like to return to the main menu?")
+    system("clear")
+end
+
+#returns list choice int. value
 def log_selection(question)
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
@@ -229,31 +225,22 @@ def log_selection(question)
     return list_choice
 end
 
+# returns associated list choice array
 def log_edit_selection(question)
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
     list_choice = prompt.select(question, choices)
 
-    if list_choice == 1
-        list_choice = @current_reads
-        return list_choice
-    elsif list_choice == 2
-        list_choice = @future_reads
-        return list_choice
-    else list_choice == 3
-        list_choice = @past_reads
-        return list_choice
-    end
+        if list_choice == 1
+            list_choice = @current_reads
+            return list_choice
+        elsif list_choice == 2
+            list_choice = @future_reads
+            return list_choice
+        else list_choice == 3
+            list_choice = @past_reads
+            return list_choice
+        end
     return list_choice
+    end
 end
-
-# p @current_reads[0][0] = "Green eggs and ham"
-# p @current_reads
-
-
-# p log_selection("Please choose a log to view:")
-
-# prompt = TTY::Prompt.new
-# prompt.yes?("Does Rick like pineapples with pizza?")
-
-# puts prompt
