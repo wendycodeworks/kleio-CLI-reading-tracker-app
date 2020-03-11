@@ -60,39 +60,33 @@ def add_book()
     puts "Please enter author:"
     @author = gets.chomp
 
-    prompt = TTY::Prompt.new
-    question = "Please choose a log:"
-    choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
-    list_choice = prompt.select(question, choices)
+    list_choice = edit_log('Please select a log')
 
     title = Book.new(@title, @author)
 
     if list_choice == 1
          @current_reads << [@title, @author]
-         return_to_mm
     elsif list_choice == 2
          @future_reads << [@title, @author]
-         return_to_mm
     elsif list_choice == 3
          @past_reads << [@title, @author]
-         return_to_mm
     end
-    return title
+    back_to_main()
 end
 
 #change title, author or progess
-def edit_search_book
+def edit_book()
     # select array
-        list_choice = log_edit_selection('Please select a log')
-        #identify entry in chosen array
-        log = list_choice
-        prompt = TTY::Prompt.new
-        search_result = prompt.ask("Search by title or author:")
+    list_choice = edit_log('Please select a log')
+    #identify entry in chosen array
+    log = list_choice
+    prompt = TTY::Prompt.new
+    search_result = prompt.ask("Search by title or author:")
 
-        exist = false
+    exist = false
 
         for i in 0..log.length-1
-            if log[i][0].include?(search_result)
+            if log[i][0].include?(search_result.to_s)
                 puts log[i]
                 puts "Record located. Enter new title:"
                 user_input = gets.chomp.to_s 
@@ -109,13 +103,13 @@ def edit_search_book
             end
         end 
     if exist == false
-        p 'invalid input'
+        search_error()
      end
 end
     
 def delete_book()
         # select array
-        list_choice = log_edit_selection('Please select a log')
+        list_choice = edit_log('Please select a log')
         #identify entry in chosen array
         log = list_choice
         prompt = TTY::Prompt.new
@@ -132,21 +126,22 @@ def delete_book()
                     log.delete(log[i]) 
                     else
                     list_choice
+                    exist = true
                     end
-                # puts log
-                exist = true
-            # elsif log[i][1].include?(search_result)
-            #     puts "Record located. #{log[i]}"
-            #     prompt = TTY::Prompt.new
-            #     user_input = prompt.ask("Enter new author:")
-            #     log[i][1] = user_input
-            #     puts "Record updated to #{log[i][0]} by #{log[i][1]}"
-            #     exist = true
+            elsif log[i][1].include?(search_result)
+               puts log[i]
+                prompt = TTY::Prompt.new
+                results = prompt.yes?("Record located. Would you like to delete record?")
+                    if results == true
+                    log.delete(log[i]) 
+                    else
+                    list_choice
+                    exist = true
+                    end
+                end 
             end
-        end 
-    if exist == false
-        p 'invalid input'
-    return_to_mm
+        if exist == false
+        search_error()
      end
 
 end
@@ -154,43 +149,38 @@ end
 # User reading log functions 
 ## Check/view logs
 def check_log()
+    
     system("clear")
     
-   list_choice = log_selection("Please select a log:")
-    
+   list_choice = view_log("Please select a log:")
+
     if list_choice == 1
         total_current = @current_reads.count()
         if total_current > 0
-            table = Terminal::Table.new :title => "Current Reads", :headings => ['Title', 'Author'], :rows => @current_reads
-            table.style = {:all_separators => true}
-            puts table
+            puts log_display(@current_reads)
             box = TTY::Box.info("Total current reads: #{total_current}")
             print box
-            return_to_mm
+            back_to_main()
         else
-            error_in_log
-            return_to_mm
+            empty_log()
         end
     elsif list_choice == 2
         total_future = @future_reads.count()
         if total_future > 0
-            puts @future_reads
+            puts log_display(@future_reads)
             box = TTY::Box.info("Total future reads: #{total_future}")
             print box
         else
-            error_in_log
-            return_to_mm()
+            empty_log()
         end
     else list_choice == 3 
         total_past = @past_reads.count()
         if total_past > 0
-            table = Terminal::Table.new :past_reads => @past_reads
-            puts table
+            puts log_display(@past_reads)
             box = TTY::Box.info("Total past reads: #{total_past}")
             print box
         else
-            error_in_log
-            return_to_mm()
+            empty_log()
         end
     end
 end
@@ -205,22 +195,29 @@ end
 
 #   Error Handling
 
-def error_in_log
+def empty_log()
     error = TTY::Box.warn("Sorry log is empty. Return to main menu to add a book to this log.")
     puts error
+    back_to_main()
 end
 
+def search_error()
+    error = TTY::Box.warn("Sorry no record found. Try another log.")
+    puts error
+    back_to_main()
+end
 #   Info messages to user
 
-def start_greeting
+def app_greeting(name)
     font = TTY::Font.new(:doom)
     pastel = Pastel.new
-    puts pastel.white(font.write("Hello!"))
+    puts pastel.white(font.write("Hello #{name}"))
 end
 
 #   Navigation Methods
 
-def main_menu_action(user_input) 
+def main_menu() 
+    puts "Main Menu"
     prompt = TTY::Prompt.new
     question = "Select an action:"
     choices = [{"Add book" => 1}, {"Check log" => 2}, {"Manage log" => 3}, {"Exit" => 4}]
@@ -233,25 +230,44 @@ def main_menu_action(user_input)
         check_log()
     # manage log
         elsif user_input == 3
-        edit_book
+        manage_log()
     # exit app
         elsif user_input ==  4
-        puts "You can check out any time you like but you can never leave. *Guitar riffs*"
+            return user_input
+    
     end
+end
+
+# menu for manage_log
+def manage_log()
+    prompt = TTY::Prompt.new
+    question = "Select an action:"
+    choices = [{"Edit book" => 1}, {"Delete book" => 2}]
+    user_input = prompt.select(question, choices)
+            if user_input == 1
+                edit_book()
+            elsif user_input == 2
+                delete_book()
+            end
 end
 
 # returns user to main menu
-def return_to_mm()
+def back_to_main()
     prompt = TTY::Prompt.new
-    user_input = prompt.yes?("Would you like to return to the main menu?")
-    if user_input == true 
-    end
-    system("clear")
-    main_menu_action(user_input)
+    user_input = prompt.keypress("Press space or enter to return to main menu", keys: [:space, :return])
+    main_menu()
+end
+
+# Log methods
+#displays logs in a table
+def log_display(log)
+    table = Terminal::Table.new :title => "Current Reads", :headings => ['Title', 'Author'], :rows => log
+    table.style = {:all_separators => true}
+    return table
 end
 
 #returns list choice int. value
-def log_selection(question)
+def view_log(question)
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
     list_choice = prompt.select(question, choices)
@@ -267,7 +283,7 @@ def log_selection(question)
 end
 
 # returns associated list choice array
-def log_edit_selection(question)
+def edit_log(question)
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
     list_choice = prompt.select(question, choices)
@@ -284,5 +300,3 @@ def log_edit_selection(question)
         end
     return list_choice
 end
-
-delete_book
