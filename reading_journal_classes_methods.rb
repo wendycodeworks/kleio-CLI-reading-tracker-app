@@ -1,20 +1,5 @@
 # Terminal-app Reading Journal Classes & Methods
 
-#Gems
-require 'tty-box'
-require 'tty-prompt'
-require 'pastel'
-require 'tty-font'
-require 'terminal-table'
-
-# User input variables
-@user_log = [@current_reads, @future_reads, @past_reads]
-@current_reads = [["Cat in the Hat", "Dr Seuss"], ["Alice in Wonderland", "Lewis Carol"]]
-@future_reads  = []
-@past_reads    = []
-@goals = {}
-@progress = {}
-
 # Book class 
 class Book
     attr_accessor :title, :author
@@ -258,8 +243,8 @@ def back_to_main()
     user_input = prompt.keypress(
         "Press space or enter to return to main menu", keys: [:space, :return]
     )
+    system("clear")
     main_menu()
-    # system("clear")
 end
 
 # Log methods
