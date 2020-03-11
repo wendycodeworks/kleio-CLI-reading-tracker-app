@@ -81,7 +81,7 @@ def add_book()
 end
 
 #change title, author or progess
-def edit_book
+def edit_search_book
     # select array
         list_choice = log_edit_selection('Please select a log')
         #identify entry in chosen array
@@ -107,12 +107,47 @@ def edit_book
                 puts "Record updated to #{log[i][0]} by #{log[i][1]}"
                 exist = true
             end
+        end 
     if exist == false
         p 'invalid input'
      end
 end
     
-def delete_book(title)
+def delete_book()
+        # select array
+        list_choice = log_edit_selection('Please select a log')
+        #identify entry in chosen array
+        log = list_choice
+        prompt = TTY::Prompt.new
+        search_result = prompt.ask("Search by title or author:")
+
+        exist = false
+
+        for i in 0..log.length-1
+            if log[i][0].include?(search_result)
+                puts log[i]
+                prompt = TTY::Prompt.new
+                results = prompt.yes?("Record located. Would you like to delete record?")
+                    if results == true
+                    log.delete(log[i]) 
+                    else
+                    list_choice
+                    end
+                # puts log
+                exist = true
+            # elsif log[i][1].include?(search_result)
+            #     puts "Record located. #{log[i]}"
+            #     prompt = TTY::Prompt.new
+            #     user_input = prompt.ask("Enter new author:")
+            #     log[i][1] = user_input
+            #     puts "Record updated to #{log[i][0]} by #{log[i][1]}"
+            #     exist = true
+            end
+        end 
+    if exist == false
+        p 'invalid input'
+    return_to_mm
+     end
 
 end
 
@@ -185,8 +220,11 @@ end
 
 #   Navigation Methods
 
-def main_menu_action(user_input)   
-    # user_input = log_selection("Please select a log:")
+def main_menu_action(user_input) 
+    prompt = TTY::Prompt.new
+    question = "Select an action:"
+    choices = [{"Add book" => 1}, {"Check log" => 2}, {"Manage log" => 3}, {"Exit" => 4}]
+    user_input = prompt.select(question, choices) 
     #add new book to log
     if user_input ==  1
         add_book()
@@ -205,8 +243,11 @@ end
 # returns user to main menu
 def return_to_mm()
     prompt = TTY::Prompt.new
-    prompt.yes?("Would you like to return to the main menu?")
+    user_input = prompt.yes?("Would you like to return to the main menu?")
+    if user_input == true 
+    end
     system("clear")
+    main_menu_action(user_input)
 end
 
 #returns list choice int. value
@@ -242,5 +283,6 @@ def log_edit_selection(question)
             return list_choice
         end
     return list_choice
-    end
 end
+
+delete_book

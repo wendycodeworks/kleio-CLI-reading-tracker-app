@@ -3,8 +3,6 @@
 require_relative 'reading_journal_classes_methods'
 require 'tty-prompt'
 
-p main_menu_action
-
 initialise_app = true
 start_greeting()
 name = "Reader"
