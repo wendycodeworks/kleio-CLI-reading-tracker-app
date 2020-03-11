@@ -25,8 +25,8 @@ class Book
     end
 end
 
-# Goals Method
-## Setting reading goal
+#   Goals Method
+# Setting reading goal
 def set_goals
     # Prompt user to set a goal 
 
@@ -52,8 +52,8 @@ def view_progress
 
 end
 
-# Book methods
-## Creating a record of a book to be stored in one of 3 lists
+# Book & Log methods
+#Creating a record of a book to be stored in one of 3 lists
 def add_book()
     puts "Please enter book title:"
     @title = gets.chomp
@@ -74,7 +74,7 @@ def add_book()
     back_to_main()
 end
 
-#change title, author or progess
+# search for and change book item
 def edit_book()
     # select array
     list_choice = edit_log('Please select a log')
@@ -106,7 +106,8 @@ def edit_book()
         search_error()
      end
 end
-    
+
+# search for and delete book item      
 def delete_book()
         # select array
         list_choice = edit_log('Please select a log')
@@ -146,8 +147,7 @@ def delete_book()
 
 end
 
-# User reading log functions 
-## Check/view logs
+# Check/view logs
 def check_log()
     
     system("clear")
@@ -155,29 +155,28 @@ def check_log()
    list_choice = view_log("Please select a log:")
 
     if list_choice == 1
-        total_current = @current_reads.count()
-        if total_current > 0
+        total_amount = @current_reads.count()
+        if total_amount > 0
             puts log_display(@current_reads)
-            box = TTY::Box.info("Total current reads: #{total_current}")
-            print box
+            puts log_total_display(total_amount)
             back_to_main()
         else
             empty_log()
         end
     elsif list_choice == 2
-        total_future = @future_reads.count()
-        if total_future > 0
+        total_amount = @future_reads.count()
+        if total_amount > 0
             puts log_display(@future_reads)
-            box = TTY::Box.info("Total future reads: #{total_future}")
+            puts log_total_display(total_amount)
             print box
         else
             empty_log()
         end
     else list_choice == 3 
-        total_past = @past_reads.count()
-        if total_past > 0
+        total_amount = @past_reads.count()
+        if total_amount > 0
             puts log_display(@past_reads)
-            box = TTY::Box.info("Total past reads: #{total_past}")
+            puts log_total_display(total_amount)
             print box
         else
             empty_log()
@@ -194,20 +193,22 @@ end
 # end
 
 #   Error Handling
-
+# Opening an empty log
 def empty_log()
     error = TTY::Box.warn("Sorry log is empty. Return to main menu to add a book to this log.")
     puts error
     back_to_main()
 end
 
+# Editing/Deleting a log - unable to locate record
 def search_error()
     error = TTY::Box.warn("Sorry no record found. Try another log.")
     puts error
     back_to_main()
 end
-#   Info messages to user
 
+#   Greetings
+# Opening 
 def app_greeting(name)
     font = TTY::Font.new(:doom)
     pastel = Pastel.new
@@ -215,7 +216,7 @@ def app_greeting(name)
 end
 
 #   Navigation Methods
-
+# Main Menu 
 def main_menu() 
     puts "Main Menu"
     prompt = TTY::Prompt.new
@@ -226,68 +227,77 @@ def main_menu()
     if user_input ==  1
         add_book()
     #check log
-        elsif user_input ==  2
+    elsif user_input ==  2
         check_log()
     # manage log
-        elsif user_input == 3
+    elsif user_input == 3
         manage_log()
     # exit app
-        elsif user_input ==  4
+    elsif user_input ==  4
             return user_input
     
     end
 end
 
-# menu for manage_log
+# Manage Log Menu
 def manage_log()
     prompt = TTY::Prompt.new
     question = "Select an action:"
     choices = [{"Edit book" => 1}, {"Delete book" => 2}]
-    user_input = prompt.select(question, choices)
-            if user_input == 1
-                edit_book()
-            elsif user_input == 2
-                delete_book()
-            end
+        user_input = prompt.select(question, choices)
+        if user_input == 1
+            edit_book()
+        elsif user_input == 2
+            delete_book()
+        end
 end
 
-# returns user to main menu
+# Return to main menu
 def back_to_main()
     prompt = TTY::Prompt.new
-    user_input = prompt.keypress("Press space or enter to return to main menu", keys: [:space, :return])
+    user_input = prompt.keypress(
+        "Press space or enter to return to main menu", keys: [:space, :return]
+    )
     main_menu()
+    # system("clear")
 end
 
 # Log methods
-#displays logs in a table
+# Table display
 def log_display(log)
-    table = Terminal::Table.new :title => "Current Reads", :headings => ['Title', 'Author'], :rows => log
-    table.style = {:all_separators => true}
+        table = Terminal::Table.new :title => "Current Reads", :headings => ['Title', 'Author'], :rows => log, :style => {:width => 50}
+        table.style = {:all_separators => true}
     return table
 end
 
-#returns list choice int. value
+# Total reads by log display
+def log_total_display(total_reads)
+box = TTY::Box.frame(width: 50, height: 5, align: :center, padding: 1, border: :thick, title: {top_left: ' TOTAL '}) do
+    "#{total_reads} books."
+    end
+return box
+end
+
+# Return list choice as an integer (for viewing of logs)
 def view_log(question)
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
     list_choice = prompt.select(question, choices)
-    
-    if list_choice == 1
-        return list_choice
-    elsif list_choice == 2
-        return list_choice
-    else list_choice == 3
-        return list_choice
-    end
+        if list_choice == 1
+            return list_choice
+        elsif list_choice == 2
+            return list_choice
+        else list_choice == 3
+            return list_choice
+        end
     return list_choice
 end
 
-# returns associated list choice array
+# Returns list choice as array
 def edit_log(question)
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
     list_choice = prompt.select(question, choices)
-
         if list_choice == 1
             list_choice = @current_reads
             return list_choice

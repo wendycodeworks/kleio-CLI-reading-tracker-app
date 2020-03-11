@@ -1,4 +1,4 @@
-# TA_CLIO_Reading_Journal
+# # TA_CLIO_Reading_Journal
 
 require_relative 'reading_journal_classes_methods'
 require 'tty-prompt'
@@ -17,4 +17,3 @@ user_input = main_menu()
     end
 
 end
-
