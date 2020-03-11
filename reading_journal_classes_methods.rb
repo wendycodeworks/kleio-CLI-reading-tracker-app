@@ -53,11 +53,10 @@ end
 # Book & Log methods
 #Creating a record of a book to be stored in one of 3 lists
 def add_book()
-    prompt = TTY::Prompt.new
-    @title = prompt.ask("Please enter book title:", required: true) 
-    prompt = TTY::Prompt.new
-    @author = prompt.ask("Please enter author:", required: true) 
 
+    @title = add_dets("Please enter title:")
+    @author = add_dets("Please enter author:")
+ 
     list_choice = view_log('Which log would you like to add this book to?')
 
     title = Book.new(@title, @author)
@@ -72,6 +71,11 @@ def add_book()
     back_to_main()
 end
 
+def add_dets(question)
+    prompt = TTY::Prompt.new
+    prompt.ask(question, required: true) 
+end
+
 # search for and change book item
 def edit_book()
     # select array
@@ -79,22 +83,20 @@ def edit_book()
     #identify entry in chosen array
     log = list_choice
     prompt = TTY::Prompt.new
-    search_result = prompt.ask("Search by title or author:")
+    search_result = prompt.ask("Search by title or author:", required: true)
 
     exist = false
 
         for i in 0..log.length-1
             if log[i][0].include?(search_result.to_s)
                 puts log[i]
-                puts "Record located. Enter new title:"
-                user_input = gets.chomp.to_s 
+                user_input = add_dets("Please enter title:")
                 log[i][0] = user_input
                 puts "Record updated to #{log[i][0]} by #{log[i][1]}"
                 exist = true
             elsif log[i][1].include?(search_result)
                 puts "Record located. #{log[i]}"
-                prompt = TTY::Prompt.new
-                user_input = prompt.ask("Enter new author:")
+                user_input = add_dets("Please enter author:")
                 log[i][1] = user_input
                 puts "Record updated to #{log[i][0]} by #{log[i][1]}"
                 exist = true
@@ -103,6 +105,7 @@ def edit_book()
     if exist == false
         search_error()
      end
+       back_to_main
 end
 
 # search for and delete book item      
@@ -138,7 +141,7 @@ def delete_book()
         if exist == false
         search_error()
      end
-     back_to_main
+   
 end
 
 # Check/view logs
@@ -236,6 +239,21 @@ def back_to_main()
     system("clear")
     main_menu()
 end
+
+# Return previous menu
+# def back_to(previous_menu)
+#     prompt = TTY::Prompt.new
+#     choices =[{"Previous Menu" => 1}, {"Main Menu" => 1}]
+#     question = "Return to.."
+#     user_input = prompt.select(question, choices)
+
+#     if user_input == 1
+#         previous_menu
+#     elsif user_input == 2
+#         main_menu
+#     end
+
+# end
 
 # Log methods
 
