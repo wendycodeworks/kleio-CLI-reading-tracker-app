@@ -66,16 +66,20 @@ end
 
 # set_goals()
 
-def back_to(previous_menu)
-    prompt = TTY::Prompt.new
-    choices =[{"Previous Menu" => 1}, {"Main Menu" => 1}]
-    question = "Return to.."
-    user_input = prompt.select(question, choices)
+# def back_to(previous_menu)
+#     prompt = TTY::Prompt.new
+#     choices =[{"Previous Menu" => 1}, {"Main Menu" => 1}]
+#     question = "Return to.."
+#     user_input = prompt.select(question, choices)
 
-    if user_input == 1
-        previous_menu
-    elsif user_input == 2
-        main_menu
-    end
+#     if user_input == 1
+#         previous_menu
+#     elsif user_input == 2
+#         main_menu
+#     end
 
-end
+# end
+
+table = TTY::Table.new ['Title', 'Author'], @current_reads
+
+p table.render(:ascii)

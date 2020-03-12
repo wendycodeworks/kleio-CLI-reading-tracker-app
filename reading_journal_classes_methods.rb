@@ -90,13 +90,13 @@ def edit_book()
         for i in 0..log.length-1
             if log[i][0].include?(search_result.to_s)
                 puts log[i]
-                user_input = add_dets("Please enter title:")
+                user_input = add_dets("Please enter new title:")
                 log[i][0] = user_input
                 puts "Record updated to #{log[i][0]} by #{log[i][1]}"
                 exist = true
             elsif log[i][1].include?(search_result)
                 puts "Record located. #{log[i]}"
-                user_input = add_dets("Please enter author:")
+                user_input = add_dets("Please enter new author:")
                 log[i][1] = user_input
                 puts "Record updated to #{log[i][0]} by #{log[i][1]}"
                 exist = true
@@ -113,7 +113,7 @@ def delete_book()
         list_choice = edit_log('Please select a log')
         log = list_choice
         prompt = TTY::Prompt.new
-        search_result = prompt.ask("Search by title or author:")
+        search_result = add_dets("Search by title or author:")
         exist = false
         for i in 0..log.length-1
             if log[i][0].include?(search_result)
@@ -260,10 +260,10 @@ end
 # Complete log display
 def check_log_display(list_choice, total_amount, log_name)
     if total_amount > 0
-        table = Terminal::Table.new :title => "#{log_name}", :headings => ['Title', 'Author'], :rows => list_choice, :style => {:width => 50}
+        table = Terminal::Table.new :title => "#{log_name}", :headings => ['Title', 'Author'], :rows => list_choice, :style => {:width => 100}
         table.style = {:all_separators => true}
         puts table
-        box = TTY::Box.frame(width: 50, height: 5, align: :center, padding: 1, border: :thick, title: {top_left: ' TOTAL '}) do
+        box = TTY::Box.frame(width: 100, height: 5, align: :center, padding: 1, border: :thick, title: {top_center: ' TOTAL '}) do
             "#{total_amount} books"
             end
         puts box
