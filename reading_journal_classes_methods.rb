@@ -82,8 +82,7 @@ def edit_book()
     list_choice = edit_log('Please select a log')
     #identify entry in chosen array
     log = list_choice
-    prompt = TTY::Prompt.new
-    search_result = prompt.ask("Search by title or author:", required: true)
+    search_result = add_dets("Search by title or author:")
 
     exist = false
 
@@ -110,9 +109,8 @@ end
 
 # search for and delete book item      
 def delete_book()
-        list_choice = edit_log('Please select a log')
+        list_choice = edit_log("Please select a log: ")
         log = list_choice
-        prompt = TTY::Prompt.new
         search_result = add_dets("Search by title or author:")
         exist = false
         for i in 0..log.length-1
