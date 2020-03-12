@@ -82,9 +82,7 @@ end
 # search for and change book item
 def edit_book()
     puts title_box("Edit book in a log")
-    list_choice = edit_log('Please select a log')
-    #identify entry in chosen array
-    log = list_choice
+    log = edit_log('Please select a log')
     search_result = add_dets("Search by title or author:")
 
     exist = false
@@ -104,7 +102,7 @@ def edit_book()
                 exist = true
             end
         end 
-    if exist == false
+        if exist == false
         search_error()
      end
     back_to_main()
@@ -129,8 +127,7 @@ def delete_book()
                     end
                     exist = true
             elsif log[i][1].include?(search_result)
-               puts log[i]
-                prompt = TTY::Prompt.new
+                puts log[i]
                 results = confirm("Record located. Would you like to delete record?")
                     if results == true
                     log.delete(log[i]) 
@@ -149,7 +146,6 @@ end
 
 # Check/view logs
 def check_log()
-    system("clear")
    puts title_box("Check Log")
    list_choice = view_log("Please select a log:")
     if list_choice == 1
@@ -159,6 +155,7 @@ def check_log()
     elsif list_choice == 3 
         puts check_log_display(@past_reads, @past_reads.count(), @user_log[2])
     end
+    back_to_main()
 end
 
 #   Error Handling
@@ -260,7 +257,6 @@ end
 
 # Complete log display
 def check_log_display(list_choice, total_amount, log_name)
-    system("clear")
     if total_amount > 0
         table = Terminal::Table.new :title => "#{log_name}", :headings => ['Title', 'Author'], :rows => list_choice, :style => {:width => 100}
         table.style = {:all_separators => true}
@@ -286,14 +282,12 @@ def view_log(question)
         elsif list_choice == 3
             return list_choice
         else list_choice == 4
-            back_to_main()
+            return list_choice
         end
-    return list_choice
 end
 
 # Returns list choice as array
 def edit_log(question)
-    system("clear")
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}]
     list_choice = prompt.select(question, choices)
