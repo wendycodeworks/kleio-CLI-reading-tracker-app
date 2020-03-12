@@ -104,7 +104,7 @@ def edit_book()
     if exist == false
         search_error()
      end
-       back_to_main
+    back_to_main
 end
 
 # search for and delete book item      
@@ -139,7 +139,7 @@ def delete_book()
         if exist == false
         search_error()
      end
-   
+   back_to_main()
 end
 
 # Check/view logs
@@ -191,7 +191,10 @@ end
 #   Navigation Methods
 # Main Menu 
 def main_menu() 
-    puts "Main Menu"
+    system("clear")
+    box = TTY::Box.frame(width: 61, height: 5, align: :center, padding: 1, border: :thick, title: {top_center: " Hello, it's Kleio "}) do
+        "Main Menu" end
+    puts box
     prompt = TTY::Prompt.new
     question = "Select an action:"
     choices = [{"Add book" => 1}, {"Check log" => 2}, {"Manage log" => 3}, {"Exit" => 4}]

@@ -3,7 +3,7 @@
 #Gems
 require 'tty-box'
 require 'tty-prompt'
-require 'pastel'
+require 'colorize'
 require 'tty-font'
 require 'terminal-table'
 
@@ -12,9 +12,8 @@ require_relative 'reading_journal_classes_methods'
 
 
 initialise_app = true
-name = "Reader"
-app_greeting(name)
-puts "I'm Clio - your reading companion." 
+# name = "Reader"
+# app_greeting(name)
 
 while initialise_app == true
 
@@ -79,7 +78,3 @@ end
 #     end
 
 # end
-
-table = TTY::Table.new ['Title', 'Author'], @current_reads
-
-p table.render(:ascii)
