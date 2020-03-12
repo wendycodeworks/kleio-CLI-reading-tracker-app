@@ -149,7 +149,7 @@ end
 
 # Check/view logs
 def check_log()
-   system("clear")
+    system("clear")
    puts title_box("Check Log")
    list_choice = view_log("Please select a log:")
     if list_choice == 1
@@ -159,13 +159,13 @@ def check_log()
     elsif list_choice == 3 
         puts check_log_display(@past_reads, @past_reads.count(), @user_log[2])
     end
-    back_to_main()
 end
 
 #   Error Handling
 
 # Error Prevention
 def title_box(input)
+    system("clear")
     box = TTY::Box.frame(width: 61, align: :center, padding: 1, border: :thick, title: {top_center: " Hello, it's Kleio "}) do
         "#{input}" end
     return box
@@ -276,7 +276,6 @@ end
 
 # Return list choice as an integer (for viewing of logs)
 def view_log(question)
-    system("clear")
     prompt = TTY::Prompt.new
     choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}, {"Cancel" => 4}]
     list_choice = prompt.select(question, choices)
