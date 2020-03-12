@@ -220,7 +220,7 @@ def manage_log()
     system("clear")
     prompt = TTY::Prompt.new
     question = "Select an action:"
-    choices = [{"Reassign book" => 1}, {"Edit book" => 2}, {"Delete book" => 3} ]
+    choices = [{"Reassign book" => 1}, {"Edit book" => 2}, {"Delete book" => 3}, {"Back" => 4} ]
         user_input = prompt.select(question, choices)
         if user_input == 1
             p "Feature coming soon!"
@@ -228,6 +228,8 @@ def manage_log()
             edit_book()
         elsif user_input == 3
             delete_book()
+        elsif user_input == 4
+            back_to_main()
         end
 end
 
