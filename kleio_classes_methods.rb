@@ -39,8 +39,6 @@ end
 def add_dets(question)
     prompt = TTY::Prompt.new
     answer = prompt.ask(question, required: true)
-     if answer == "<"
-     end
      return answer
 end
 
