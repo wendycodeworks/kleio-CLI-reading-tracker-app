@@ -1,72 +1,37 @@
 # Terminal-app Reading Journal Classes & Methods
-
+#Gems
+require 'tty-box'
+require 'tty-prompt'
+require 'tty-font'
+require 'terminal-table'
 # User input variables
-@user_log = ["Current Reads", "Future Reads", "Past Reads"]
+@user_log = ["Current Reads", "Future Reads", "Past Reads", "All Reads"]
 @current_reads = [["Cat in the Hat", "Dr Seuss"], ["Alice in Wonderland", "Lewis Carol"]]
 @future_reads  = [["Beyond Infinity", "Eugene Cheng"], ["Create Dangerously", "Albert Camus"]]
 @past_reads    = []
+@all_reads = [["Beyond Infinity", "Eugene Cheng"], ["Create Dangerously", "Albert Camus"], ["Cat in the Hat", "Dr Seuss"], ["Alice in Wonderland", "Lewis Carol"]]
 # @goals = {}
 # @progress = {}
-
-# Book class 
-class Book
-    attr_accessor :title, :author
-    def initialize(title, author)
-    @title = title
-    @author = author
-    puts "Successfully added #{@title} by #{@author}."
-    end
-end
-
-#   Goals Method
-# Setting reading goal
-# @user_goal = []
-
-# #   Goals Method
-# # Setting reading goal
-# def set_goals()
-#     # Prompt user to set a goal 
-#     puts "Enter a number of books you would like to read:"
-#     @goal_num = gets.chomp.to_i
-#     prompt = TTY::Prompt.new
-#     question = "When would you like to achieve this by?"
-#     choices = [{"A year" => 1}, {"A month" => 2}]
-#     user_input = prompt.select(question, choice
-
-#     return "You have set your goal to #{@goal_num} books in #{goal_set(user_input)}. Nice work!"
-# end
-
-## View progress based on current reading habits
-def view_progress
-    # Do in progress
-
-    # check past reads
-
-    # compare to current goals
-
-    # if complete all current reads return progress
-
-    # if complete all future reads return progress
-
-end
 
 # Book & Log methods
 #Creating a record of a book to be stored in one of 3 lists
 def add_book()
+    system("clear")
     puts title_box("Add Book")
     @title = add_dets("Please enter title:")
     @author = add_dets("Please enter author:")
  
     list_choice = view_log('Which log would you like to add this book to?')
 
-    title = Book.new(@title, @author)
-
     if list_choice == 1
-         @current_reads << [@title, @author]
+        @current_reads << [@title, @author]
+         puts "Successfully added #{@title} by #{@author}."
     elsif list_choice == 2
-         @future_reads << [@title, @author]
+        @future_reads << [@title, @author]
+         puts "Successfully added #{@title} by #{@author}."
     elsif list_choice == 3
-         @past_reads << [@title, @author]
+        @past_reads << [@title, @author]
+         puts "Successfully added #{@title} by #{@author}."
     end
     back_to_main()
 end
@@ -111,17 +76,16 @@ end
 # search for and delete book item      
 def delete_book()
         puts title_box("Delete book from a log")
-        list_choice = edit_log("Please select a log: ")
-        log = list_choice
+        log = edit_log("Please select a log: ")
         search_result = add_dets("Search by title or author:")
         exist = false
         for i in 0..log.length-1
-            if log[i][0].include?(search_result)
+            if log[i].include?(search_result.to_s)
                 puts log[i]
                 results = confirm("Record located. Would you like to delete record?")
                     if results == true
                     log.delete(log[i]) 
-                    puts "Record deleted."
+                    puts notification("Record deleted.")
                     else
                     list_choice
                     end
@@ -146,6 +110,7 @@ end
 
 # Check/view logs
 def check_log()
+    system("clear")
    puts title_box("Check Log")
    list_choice = view_log("Please select a log:")
     if list_choice == 1
@@ -163,7 +128,7 @@ end
 # Error Prevention
 def title_box(input)
     system("clear")
-    box = TTY::Box.frame(width: 61, align: :center, padding: 1, border: :thick, title: {top_center: " Hello, it's Kleio "}) do
+    box = TTY::Box.frame(width: 100, align: :center, padding: 1, border: :thick, title: {top_center: " Hello, it's Kleio "}) do
         "#{input}" end
     return box
 end
@@ -188,13 +153,21 @@ def app_greeting(name)
     puts pastel.white(font.write("Hello #{name}"))
 end
 
+def notification(input)
+    system("clear")
+    box = TTY::Box.info("#{input}") 
+    return box
+end
+
 #   Navigation Methods
 # Main Menu 
 def main_menu() 
     user_input = nil
     while user_input != 4
         system("clear")
+
         puts title_box("Main Menu")
+
         prompt = TTY::Prompt.new
         question = "Select an action:"
         choices = [{"Add book" => 1}, {"Check log" => 2}, {"Manage log" => 3}, {"Exit" => 4}]
@@ -217,6 +190,7 @@ end
 # Manage Log Menu
 def manage_log()
     system("clear")
+    puts @banner
     puts title_box("Manage Log")
     prompt = TTY::Prompt.new
     question = "Select an action:"
@@ -257,12 +231,13 @@ end
 
 # Complete log display
 def check_log_display(list_choice, total_amount, log_name)
+    system("clear")
     if total_amount > 0
         table = Terminal::Table.new :title => "#{log_name}", :headings => ['Title', 'Author'], :rows => list_choice, :style => {:width => 100}
         table.style = {:all_separators => true}
         puts table
         box = TTY::Box.frame(width: 100, height: 5, align: :center, padding: 1, border: :thick, title: {top_center: ' TOTAL '}) do
-            "#{total_amount} books"
+            "#{total_amount} books in your #{log_name}."
             end
         puts box
     else
@@ -273,7 +248,8 @@ end
 # Return list choice as an integer (for viewing of logs)
 def view_log(question)
     prompt = TTY::Prompt.new
-    choices = [{"Current reads" => 1}, {"Future reads" => 2}, {"Past reads" => 3}, {"Cancel" => 4}]
+    choices = [{"#{@user_log[0]}" => 1}, {"#{@user_log[1]}" => 2}, {"#{@user_log[2]}"=> 3}, {"Cancel"=> 4}]
+    # choices = [{"All reads" => 1}, {"Current reads" => 2}, {"Future reads" => 3}, {"Past reads" => 4}, {"Cancel" => 5}]
     list_choice = prompt.select(question, choices)
         if list_choice == 1
             return list_choice
@@ -281,9 +257,10 @@ def view_log(question)
             return list_choice
         elsif list_choice == 3
             return list_choice
-        else list_choice == 4
+        elsif list_choice == 4
             return list_choice
         end
+    
 end
 
 # Returns list choice as array
