@@ -1,0 +1,9 @@
+Kleio help
+
+Kleio is an application designed to help users keep track of their books as they read. 
+It acts as a reading log that allows users to record books in three different lists: 
+current reads, future reads and past reads. This allows the user to keep an updated repository 
+of the books they have read, will read or are currently reading.
+
+For more info:
+https://github.com/wendycodeworks/terminal_app_reading_journal/blob/master/README.md#11-----what-is-kleio

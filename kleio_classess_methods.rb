@@ -1,35 +1,3 @@
-# # # TA_CLIO_Reading_Journal
-
-#Gems
-require 'tty-box'
-require 'tty-prompt'
-require 'tty-font'
-require 'terminal-table'
-
-#Method file
-require_relative 'kleio_classes_methods'
-
-initialise_app = true
-name = "Reader"
-app_greeting(name)
-
-prompt = TTY::Prompt.new
-prompt.keypress(
-    "Press space or enter to continue", keys: [:space, :return]
-)
-system("clear")
-
-
-while initialise_app == true
-
-user_input = main_menu()
-
-    if user_input == 4
-        initialise_app = false
-    end
-
-end
-
 # Terminal-app Reading Journal Classes & Methods
 #Gems
 require 'tty-box'
@@ -42,11 +10,8 @@ require 'terminal-table'
 @future_reads  = [["Beyond Infinity", "Eugene Cheng"], ["Create Dangerously", "Albert Camus"]]
 @past_reads    = []
 @all_reads = [["Beyond Infinity", "Eugene Cheng"], ["Create Dangerously", "Albert Camus"], ["Cat in the Hat", "Dr Seuss"], ["Alice in Wonderland", "Lewis Carol"]]
-
-# Command line 
-if ARGV[0] == "--help" || ARGV[0] == "-h"
-    system "cat help.text"
-end
+# @goals = {}
+# @progress = {}
 
 # Book & Log methods
 #Creating a record of a book to be stored in one of 3 lists
@@ -71,7 +36,6 @@ def add_book()
     back_to_main()
 end
 
-# Adding further details - prompt and recieve
 def add_dets(question)
     prompt = TTY::Prompt.new
     answer = prompt.ask(question, required: true)
