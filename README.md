@@ -172,13 +172,13 @@ No records - if you are searching for an unrecorded item you will be prompted wi
 
  
 
-![img](file:///C:/Users/wendy/AppData/Local/Temp/msohtmlclip1/01/clip_image002.png)
+![img](./docs/kleiouserflow.png)
 
 # 5     Implementation plan
 
 ## 5.1     Feature checklist
 
- ![image-20200313165623891](C:\Users\wendy\AppData\Roaming\Typora\typora-user-images\image-20200313165623891.png)
+ ![Feature checklist](./docs/featurechecklist.png)
 
 ## 5.2     Feature prioritisation
 
