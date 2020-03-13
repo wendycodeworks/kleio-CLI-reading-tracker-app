@@ -9,7 +9,8 @@ require 'terminal-table'
 #Method file
 require_relative 'kleio_classes_methods'
 
-name = "Reader"
+prompt = TTY::Prompt.new
+name = prompt.ask("Hey there, I'm Kleio - what's your name?", required: true)
 puts app_greeting(name)
 
 prompt = TTY::Prompt.new

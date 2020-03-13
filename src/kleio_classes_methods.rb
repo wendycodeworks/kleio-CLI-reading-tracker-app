@@ -150,7 +150,7 @@ end
 def app_greeting(name)
     font = TTY::Font.new(:doom)
     pastel = Pastel.new
-    puts pastel.white(font.write("Hello #{name}"))
+    puts pastel.magenta(font.write("Hello #{name}"))
 end
 
 def notification(input)
